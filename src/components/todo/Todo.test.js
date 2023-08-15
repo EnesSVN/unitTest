@@ -1,5 +1,6 @@
 import { fireEvent, render, screen, within } from "@testing-library/react";
 import Todo from "./Todo";
+import TodoList from "./TodoList";
 
 describe("Todo", () => {
   let input;
@@ -38,4 +39,40 @@ describe("Todo", () => {
     const isDone = within(todoListItem).getByText("Done");
     expect(isDone).toBeInTheDocument();
   });
+
+  const mockData = [
+    { text: "Task 1", done: false },
+    { text: "Task 2", done: true },
+    { text: "Task 3", done: false },
+  ];
+  //   test("renders todo items correctly", () => {
+  //     render(<TodoList data={mockData} />);
+  //     const todoItems = screen.getAllByRole("listitem");
+
+  //     mockData.forEach((item, index) => {
+  //       const taskElement = todoItems[index];
+  //       expect(taskElement).toHaveTextContent(item.text);
+  //       expect(taskElement).toHaveClass(item.done ? "done" : "");
+  //     });
+  //   });
+  // });
+
+  test("calls delete function when delete button is clicked", () => {
+    const deleteMock = jest.fn();
+    render(<TodoList data={mockData} deleteOn={deleteMock} />);
+
+    const deleteButtons = screen.getAllByText("Delete");
+    fireEvent.click(deleteButtons[1]);
+    expect(deleteMock).toHaveBeenCalledWith(1);
+  });
+
+  //   test("calls edit function when edit button is clicked", () => {
+  //     const editMock = jest.fn();
+  //     render(<TodoList data={mockData} edit={editMock} />);
+
+  //     const editButtons = screen.getAllByText("Edit");
+  //     fireEvent.click(editButtons[2]);
+
+  //     expect(editMock).toHaveBeenCalledWith(2);
+  //   });
 });
